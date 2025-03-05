@@ -1,0 +1,24 @@
+CALCULAR TASA METABÓLICA BASAL (FULLY DRESSED VERSION)
+Actor principal: Persona (usuario)
+Ámbito: Calculadora de salud
+Nivel: User goal
+Stakeholders e intereses:
+Persona - Quiere conocer su TMB para gestionar su alimentación y salud.
+Médico: Puede usar la TMB para realizar diagnósticos o tratamientos preventivos.
+Entrenador deportivo: Usa la TMB para crear planes de entrenamientos y alimentación.
+Precondición: El usuario debe introducir datos válidos (peso, altura, edad y género).  
+Garantía mínima: El sistema notifica un error si los datos son inválidos.
+Garantía de éxito: El sistema muestra la TMB calculada correctamente mediante la fórmula de Harris-Benedict.  
+Escenario principal:
+1. El usuario accede a la función "Calcular tasa metabólica basal".  
+2. El sistema solicita peso, altura, edad y género.  
+3. El usuario introduce los datos.  
+4. El sistema valida los datos.  
+5. Se aplica la fórmula de Harris-Benedict.  
+6. Se muestra la TMB calculada.  
+Escenarios alternativos:
+4a. Datos inválidos (valores negativos, vacíos o fuera de rango).
+4a.1 El sistema muestra un mensaje de error.
+4a.2 Se solicita volver a ingresar los datos.
+Extensiones:
+2a.1 El sistema ofrece la opción de volver al menú principal.
