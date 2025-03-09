@@ -56,17 +56,19 @@ Para  calcular este valor se utiliza la fórmula de Harris-Benedict:
 
 ---
 
-### 🔹 **Ejecución de los casos de prueba usando Maven **  
+### 🔹 Ejecución de los casos de prueba usando Maven
 
 Comprobación de que los tests se han ejecutado exitosamente:
 ![Información de Maven](info_mvn.png)
 
-### 🔹 **Registro de instantáneas **  
+
+### 🔹 Registro de instantáneas
 
 Captura que muestra los commits que se han ido realizando durante la práctica.
 ![gikt](registro_commits.png)
 
-### 🔹 **Enlaces externos **  
+
+### 🔹 Enlaces externos   
 
 Para la creación de este archivo README e implementación de código del programa, se ha contado con la ayuda de inteligencia artificial y páginas externas como https://www.tuasaude.com/es/tasa-metabolica-basal/.
 
