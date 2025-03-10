@@ -59,13 +59,13 @@ Para  calcular este valor se utiliza la fórmula de Harris-Benedict:
 ### 🔹 Ejecución de los casos de prueba usando Maven
 
 Comprobación de que los tests se han ejecutado exitosamente:
-![Información de Maven](info_mvn.png)
+![Información de Maven](doc/infomvn.png)
 
 
 ### 🔹 Registro de instantáneas
 
 Captura que muestra los commits que se han ido realizando durante la práctica.
-![gikt](registro_commits.png)
+![gikt](doc/registro_commits.png)
 
 
 ### 🔹 Enlaces externos   
