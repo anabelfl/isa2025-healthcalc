@@ -59,7 +59,7 @@ Para  calcular este valor se utiliza la fórmula de Harris-Benedict:
 ### 🔹 Ejecución de los casos de prueba usando Maven
 
 Comprobación de que los tests se han ejecutado exitosamente:
-![Información de Maven](doc/infomvn.png)
+![Información de Maven](doc/infotests.png)
 
 
 ### 🔹 Registro de instantáneas
