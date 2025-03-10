@@ -23,7 +23,7 @@ La fórmula de Lorentz permite estimar de forma aproximada el **peso ideal** en 
 | 2. Calcular IW de un hombre | `height = 164`, `gender = 'm'` | Peso ideal en kg según la fórmula de Lorentz (60.5 kg). |
 | 3. Altura superior a 250cm | `height = 250`, `gender = 'm'` | Error: "Height out of range". |
 | 4. Altura igual a 0cm  | `height = 0`, `gender = 'm'` | Error: "Height out of range". |
-| 4. Género inválido | `height = 169`, `gender = 'X'` | Error: "Invalid gender. Do use 'w' or 'm'". |
+| 5. Género inválido | `height = 169`, `gender = 'X'` | Error: "Invalid gender. Do use 'w' or 'm'". |
 
 ---
 
@@ -59,13 +59,13 @@ Para  calcular este valor se utiliza la fórmula de Harris-Benedict:
 ### 🔹 Ejecución de los casos de prueba usando Maven
 
 Comprobación de que los tests se han ejecutado exitosamente:
-![Información de Maven](info_mvn.png)
+![Información de Maven](doc/infotests.png)
 
 
 ### 🔹 Registro de instantáneas
 
 Captura que muestra los commits que se han ido realizando durante la práctica.
-![gikt](registro_commits.png)
+![gikt](doc/registro_commits.png)
 
 
 ### 🔹 Enlaces externos   
