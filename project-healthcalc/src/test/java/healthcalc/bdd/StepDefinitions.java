@@ -1,46 +1,79 @@
 package healthcalc.bdd;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import healthcalc.HealthCalc;
+import healthcalc.HealthCalcImp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class StepDefinitions {
 	
-	private Integer result ;
+	private float result1;
 	private boolean raiseException;
-	
-	// copiar give when then en el codigo que me da el error de mvn test
+	private String exceptionMessage;
 
+	private HealthCalc HealthCalculator;
+	private int height1;
+	private char gender1;
+	
 	@Given("a health calculator")
 	public void a_health_calculator() {
-    // Write code here that turns the phrase above into concrete actions
-	// crear calculadora
-    throw new io.cucumber.java.PendingException();
-	}
+		this.HealthCalculator = new HealthCalcImp();
+ 	}
 
 	@Given("height is {int}")
-	public void height_is(Integer int1) {
-    // Write code here that turns the phrase above into concrete actions
-	// guardar valor de la altura
-    throw new io.cucumber.java.PendingException();
+	public void height_is(Integer h1) {
+		this.height1 = h1;
+	}
+
+	@Given("gender is {string}")
+	public void gender_is(String g) {
+    	if (g.equalsIgnoreCase("female")) {
+    	    this.gender1 = 'w';
+    	} else if (g.equalsIgnoreCase("male")) {
+    	    this.gender1 = 'm';
+   		} else {
+    	    this.gender1 = 'x'; // invalid gender to test exceptions
+			raiseException = true; // Indicate it throws an exception
+			exceptionMessage = "Invalid gender. Do use 'w' or 'm'";
+		}
+	}
+
+	@Given("gender is male")
+	public void gender_is_male() {
+	    this.gender1 = 'm';
 	}
 
 	@Given("gender is female")
 	public void gender_is_female() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+	    this.gender1 = 'w';
 	}
 
-	@When("I compute the ideal weight function")
-	public void i_compute_the_ideal_weight_function() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+	@When("I compute the ideal weight function")        
+	public void i_compute_the_ideal_weight_function() { 
+		try {
+			// Storage the result of idealWeight given physical characteristics
+			this.result1 = HealthCalculator.idealWeight(height1, gender1);
+		} catch (Exception e) {
+			raiseException = true; // Indicate it throws an exception
+			exceptionMessage = e.getMessage(); // Storage the exception message
+		}
 	}
 
-	@Then("The system returns {double}")
-	public void the_system_returns(Double double1) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+	@Then("the system returns a value between {double} and {double} kg.")
+	public void the_system_returns_a_value_between_and_kg(Double double1_min, Double double1_max) {
+        assertTrue(result1 >= double1_min && result1 <= double1_max, "Result is out of range.");
 	}
+
+	@Then("the system throws an exception with the message {string}.")
+	public void the_system_throws_an_exception_with_the_message(String expected_message) {
+		assertTrue(raiseException, "Expected an exception, but none was thrown.");
+		assertTrue(exceptionMessage.equals(expected_message),
+			"Expected message: \"" + expected_message + "\", but got: \"" + exceptionMessage + "\"");
+	}
+
+
 
 }

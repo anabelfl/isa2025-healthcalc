@@ -1,0 +1,43 @@
+User Story 1: Calculate Ideal Weight
+
+As a person I want to know the ideal weight
+Given physical characteristics
+So that I can determine the target weight for a healthy lifestyle.
+
+Acceptance Criteria:
+
+Scenario 1: Computing the correct value for ideal weight for women
+Given a health calculator
+And height is 164 cm
+And gender is is female
+When I compute the ideal weight function
+Then the system returns a value between 58.3 and 58.5 kg. 
+
+Scenario 2: Computing the correct value for ideal weight for men
+Given a health calculator
+And height is 180 cm
+And gender is is male
+When I compute the ideal weight function
+Then the system returns a value between 72.4 and 72.6 kg. 
+
+Scenario 3: Invalid height input
+Given a health calculator
+And height is -10 cm
+And gender is female
+When I compute the ideal weight function
+Then the system throws an exception with the message "Height out of range (1-250)".
+
+Scenario Outline: Invalid gender inputs
+Given a health calculator
+And height is 170
+And gender is <g>
+When I compute the ideal weight function
+Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".
+  
+Examples:
+| g        |
+| female   |
+| male     |
+| x        |
+| mals     |
+| femalf   |
