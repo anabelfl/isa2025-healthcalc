@@ -37,7 +37,7 @@ User Story 1: Compute Ideal Weight
         When I compute the ideal weight function
         Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".
 
-User Story 2: Calculate Basal Metabolic Rate
+User Story 2: Compute Basal Metabolic Rate
     As a person I want to know the basal metabolic rate
     given physical characteristics
     so that I can improve my lifestyle
