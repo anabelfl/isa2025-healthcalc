@@ -8,7 +8,7 @@ public class HealthCalcImp implements HealthCalc{
     public float idealWeight(int height, char gender) throws Exception {
         
         // Comprobación de parámetros
-        if (height <= 0 || height > 250) { throw new IllegalArgumentException("Height out of range (1-250)"); }
+        if (height <= 0 || height > 250) { throw new IllegalArgumentException("Height out of range (1-250 cm)"); }
         if (gender != 'm' && gender != 'w') { throw new IllegalArgumentException("Invalid gender. Do use 'w' or 'm'"); }
 
         // Cálculo del peso ideal usando la fórmula de Lorentz

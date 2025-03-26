@@ -1,43 +1,121 @@
-User Story 1: Calculate Ideal Weight
+User Story 1: Compute Ideal Weight
+    As a person, I want to know the ideal weight
+    given physical characteristics
+    so that I can determine the target weight for a healthy lifestyle.
 
-As a person I want to know the ideal weight
-Given physical characteristics
-So that I can determine the target weight for a healthy lifestyle.
+    Scenario 1: Computing the correct value for ideal weight for women
+        Given a health calculator
+        And height is 164 cm
+        And gender is female
+        When I compute the ideal weight function
+        Then the system returns a value between 58.3 and 58.5 kg. 
 
-Acceptance Criteria:
+    Scenario 2: Computing the correct value for ideal weight for men
+        Given a health calculator
+        And height is 180 cm
+        And gender is male
+        When I compute the ideal weight function
+        Then the system returns a value between 72.4 and 72.6 kg. 
 
-Scenario 1: Computing the correct value for ideal weight for women
-Given a health calculator
-And height is 164 cm
-And gender is is female
-When I compute the ideal weight function
-Then the system returns a value between 58.3 and 58.5 kg. 
+    Scenario 3: Invalid height inputs
+        Given a health calculator
+        And height is <h> cm
+        And gender is female
+        When I compute the ideal weight function
+        Then the system throws an exception with the message "Height out of range (1-250)".
+        
+        Examples:
+        |  h  |
+        | -10 |
+        |  0  |
+        | 260 |
 
-Scenario 2: Computing the correct value for ideal weight for men
-Given a health calculator
-And height is 180 cm
-And gender is is male
-When I compute the ideal weight function
-Then the system returns a value between 72.4 and 72.6 kg. 
+    Scenario 4: Invalid gender input    
+        Given a health calculator
+        And height is 170 cm
+        And gender is x
+        When I compute the ideal weight function
+        Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".
 
-Scenario 3: Invalid height input
-Given a health calculator
-And height is -10 cm
-And gender is female
-When I compute the ideal weight function
-Then the system throws an exception with the message "Height out of range (1-250)".
+User Story 2: Calculate Basal Metabolic Rate
+    As a person I want to know the basal metabolic rate
+    given physical characteristics
+    so that I can improve my lifestyle
 
-Scenario Outline: Invalid gender inputs
-Given a health calculator
-And height is 170
-And gender is <g>
-When I compute the ideal weight function
-Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".
-  
-Examples:
-| g        |
-| female   |
-| male     |
-| x        |
-| mals     |
-| femalf   |
+    Scenario 1: Computing the correct value for basal metabolic rate for women
+        Given a health calculator
+        And weight is 64 kg
+        And height is 164 cm
+        And age is 21 years
+        And gender is female
+        When I compute the basal metabolic rate function
+        Then the system returns a value between 1456.4 and 1456.6.
+
+    Scenario 2: Computing the correct value for basal metabolic rate for men
+        Given a health calculator
+        And weight is 80 kg
+        And height is 184 cm
+        And age is 25 years
+        And gender is male
+        When I compute the basal metabolic rate function
+        Then the system returns a value between 1901.1 and 1901.3.
+
+    Scenario 3: Invalid weight input. Upper limit exceeded
+        Given a health calculator
+        And weight is 450 kg
+        And height is 184 cm
+        And age is 25 years
+        And gender is male
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Weight out of range (1-400 kg)".
+
+    Scenario 4: Invalid weight input. Lower limit exceeded
+        Given a health calculator
+        And weight is -89 kg
+        And height is 184 cm
+        And age is 25 years
+        And gender is male
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Weight out of range (1-400 kg)".
+
+    Scenario 6: Invalid height inputs
+        Given a health calculator
+        And weight is 65 kg
+        And height is <h> cm
+        And age is 23 years
+        And gender is female
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Height out of range (1-250 cm)".
+
+        Examples:
+        |  h  |
+        | -10 |
+        |  0  |
+        | 260 |
+
+    Scenario 7: Invalid age input. Upper limit exceeded
+        Given a health calculator
+        And weight is 54 kg
+        And height is 156 cm
+        And age is 120 years
+        And gender is female
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Age out of range (1-110 years)".
+
+    Scenario 8: Invalid age input. Lower limit exceeded
+        Given a health calculator
+        And weight is 54 kg
+        And height is 156 cm
+        And age is 0 years
+        And gender is female
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Age out of range (1-110 years)".
+
+    Scenario 9: Invalid gender input
+        Given a health calculator
+        And weight is 54 kg
+        And height is 156 cm
+        And age is 12 years
+        And gender is x
+        When I compute the basal metabolic rate function
+        Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".

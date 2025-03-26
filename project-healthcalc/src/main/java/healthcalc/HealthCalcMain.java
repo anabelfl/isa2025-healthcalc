@@ -9,6 +9,8 @@ public class HealthCalcMain {
         System.out.println(resultado_iw);
 
         float resultado_bmr = c.basalMetabolicRate(64, 164, 21, 'w');
-        System.out.println(resultado_bmr);
+        float resultado_bmr2 = c.basalMetabolicRate(80, 184, 25, 'm');
+
+        System.out.println(resultado_bmr2);
     }
 }
