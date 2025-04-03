@@ -31,8 +31,10 @@ public class HealthCalcImp implements HealthCalc{
         // Cálculo de la Tasa Metabólica Basal usando la fórmula de Lorentz
         if (gender == 'm') {
             return 88.362f + (13.397f * weight) + (4.799f * height) - (5.677f * age);
-        } else {
+        } if (gender == 'w') {
             return 447.593f + (9.247f * weight) + (3.098f * height) - (4.330f * age);
+        } else {
+            throw new IllegalArgumentException("Invalid gender.");
         }
 
     }
