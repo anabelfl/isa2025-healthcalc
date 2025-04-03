@@ -275,7 +275,7 @@ And age is 12 years
 And gender is x
 When I compute the basal metabolic rate function
 Then the system throws an exception with the message "Invalid gender. Do use 'w' or 'm'".
-
+```
 ---
 
 ## Practice 4: Graphical User Interface
