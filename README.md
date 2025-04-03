@@ -284,7 +284,6 @@ Then the system throws an exception with the message "Invalid gender. Do use 'w'
 
 ![Ideal Weight Mockup](doc/mockup_idealweight.png)
 
-Capture showing the Basal Metabolic Rate GUI.
 ![BMR Mockup](doc/mockup_bmr.png)
 
 ### 🔹 HealthCalc Application
