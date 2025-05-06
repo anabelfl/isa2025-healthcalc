@@ -9,10 +9,11 @@ import vista.Vista;
 public class MainHealth {
 
 	public static void main(String[] args) {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					HealthCalc modelo = new HealthCalcImp();
+					HealthCalc modelo = HealthCalcImp.getInstance();
 					Vista vista = new Vista();
 					HealthCtrl controlador = new HealthCtrl(modelo, vista);
 

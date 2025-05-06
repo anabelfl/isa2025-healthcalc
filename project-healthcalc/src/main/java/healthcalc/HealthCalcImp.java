@@ -1,8 +1,21 @@
 package healthcalc;
 
-// Implementación de la intergaz HealthCalc
+// Implementación de la interfaz HealthCalc
 
 public class HealthCalcImp implements HealthCalc{
+
+    private static HealthCalcImp calc;
+    
+    private HealthCalcImp() {
+        // Constructor privado para evitar instanciación externa
+    }
+
+    public static HealthCalcImp getInstance() {
+        if (calc == null) {
+            calc = new HealthCalcImp();
+        }
+        return calc;
+    }
 
     @Override
     public float idealWeight(int height, char gender) throws Exception {
