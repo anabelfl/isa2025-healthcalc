@@ -14,7 +14,7 @@ public class HealthCalcTest {
 	// Arrange (uso general)
 	@BeforeEach
 	void initialize() {
-		calc = new HealthCalcImp();
+		calc = HealthCalcImp.getInstance();
 	}
 
 /*
