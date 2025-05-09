@@ -4,17 +4,17 @@ package healthcalc;
 
 public class HealthCalcImp implements HealthCalc{
 
-    private static HealthCalcImp calc;
+    private static HealthCalcImp instance;
     
     private HealthCalcImp() {
         // Constructor privado para evitar instanciación externa
     }
 
     public static HealthCalcImp getInstance() {
-        if (calc == null) {
-            calc = new HealthCalcImp();
+        if (instance == null) {
+            instance = new HealthCalcImp();
         }
-        return calc;
+        return instance;
     }
 
     @Override
