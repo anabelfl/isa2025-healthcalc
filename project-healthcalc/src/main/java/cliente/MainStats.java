@@ -1,6 +1,7 @@
 package cliente;
 
-import adaptador.HealthAdaptador;
+import adaptador.AmericanHealthAdapter;
+import adaptador.EuropeanHealthAdapter;
 import healthcalc.HealthCalc;
 import healthcalc.HealthCalcImp;
 import hospital.HospitalProxy;
@@ -9,36 +10,55 @@ public class MainStats {
 
     public static void main(String[] args) {
 
-        // Adapter que convierte m/g → cm/kg y llama a la calculadora real
         HealthCalc calc = HealthCalcImp.getInstance();
 
-        HealthAdaptador calcAdaptador = new HealthAdaptador(calc);
+        // Adaptadores
+        EuropeanHealthAdapter calcEuropean = new EuropeanHealthAdapter(calc);
+        AmericanHealthAdapter calcAmerican = new AmericanHealthAdapter(calc);
 
-        // Proxy que envuelve al adapter, añade estadísticas
-        HospitalProxy calcProxy = new HospitalProxy(calcAdaptador);
+        // Proxies distintos
+        HospitalProxy europeanProxy = new HospitalProxy(calcEuropean);
+        HospitalProxy americanProxy = new HospitalProxy(calcAmerican);
 
-        
         try {
-            calcProxy.idealWeight(1.64f, 'm');
-            calcProxy.basalMetabolicRate(63500f, 1.64f, 21, 'w');
-            calcProxy.basalMetabolicRate(80454, 1.8f, 30, 'm');
+            // Se añaden pacientes en sistema europeo (gramos, metros)
+            System.out.println("------ Pacientes sistema europeo ------");
+            europeanProxy.idealWeight(1.64f, 'm'); // altura en metros
+            europeanProxy.basalMetabolicRate(63500f, 1.64f, 21, 'w'); // peso en gramos, altura en metros
+            System.out.println();
+            europeanProxy.basalMetabolicRate(80400f, 1.80f, 30, 'm'); // peso en gramos, altura en metros
 
+            System.out.println();
 
-            // Obtener la media de las alturas, pesos, edades y BMR
-            System.out.println("Altura media: " + calcProxy.alturaMedia());
-            System.out.println("Peso medio: " + calcProxy.pesoMedio());
-            System.out.println("Edad media: " + calcProxy.edadMedia());
-            System.out.println("BMR medio: " + calcProxy.bmrMedio());
+            // Se añaden pacientes en sistema americano (libras, pies)
+            System.out.println("------ Pacientes sistema americano ------");
+            americanProxy.idealWeight(5.7f, 'm'); // pies
+            americanProxy.basalMetabolicRate(140f, 5.7f, 21, 'w'); // libras, pies
+            System.out.println();
+            americanProxy.basalMetabolicRate(177f, 5.9f, 30, 'm'); // libras, pies
 
-            // Obtener el número de pacientes por sexo
-            System.out.println("Número de pacientes hombres: " + calcProxy.numSexoH());
-            System.out.println("Número de pacientes mujeres: " + calcProxy.numSexoM());
+            System.out.println();
+            
+            System.out.println("------ Estadísticas Europeas ------");
+            printStats(europeanProxy);
 
-            // Obtener el número total de pacientes
-            System.out.println("Número total de pacientes: " + calcProxy.numTotalPacientes());
+            System.out.println();
+
+            System.out.println("------ Estadísticas Americanas ------");
+            printStats(americanProxy);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void printStats(HospitalProxy proxy) {
+        System.out.println("Altura media: " + proxy.alturaMedia());
+        System.out.println("Peso medio: " + proxy.pesoMedio());
+        System.out.println("Edad media: " + proxy.edadMedia());
+        System.out.println("BMR medio: " + proxy.bmrMedio());
+        System.out.println("Nº de pacientes hombres: " + proxy.numSexoH());
+        System.out.println("Nº de pacientes mujeres: " + proxy.numSexoM());
+        System.out.println("Total pacientes: " + proxy.numTotalPacientes());
     }
 }

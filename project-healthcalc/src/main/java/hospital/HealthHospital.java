@@ -1,7 +1,6 @@
 package hospital;
 
 public interface HealthHospital {
-    float idealWeight(float heightInMeters, char gender);
-    float basalMetabolicRate(float weightInGrams, float heightInMeters, int age, char gender);
-
+    float idealWeight(float height, char gender);
+    float basalMetabolicRate(float weight, float height, int age, char gender);
 }
