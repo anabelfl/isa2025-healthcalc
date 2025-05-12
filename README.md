@@ -293,3 +293,40 @@ Captures showing the Ideal Weight and Basal Metabolic Rate GUI from the applicat
 ![Ideal Weight GUI](doc/gui_idealweight.png)
 
 ![BMR GUI](doc/gui_bmr.png)
+
+---
+
+## Practice 6: Design Patterns
+
+### Singleton Pattern
+The **Singleton Pattern** is used in the `HealthCalculator` class to ensure that only one instance of the calculator exists throughout the application.
+
+![Singleton pattern](design_patterns/singleton.png)
+
+The Singleton is implemented with a static `getInstance()` method that returns the unique instance of the `HealthCalculator`.
+
+
+### Adapter Pattern
+
+The **Adapter Pattern** is applied because we need to adapt the existing `HealthCalculator` interface to match the new `HealthHospital` interface required by the hospital. By using this pattern, we can integrate the calculator without changing its core logic. The adapter acts as a bridge between the two interfaces, ensuring that the existing calculator functionality is reused while making it compatible with the hospital system.
+
+![Adapter pattern](design_patterns/adapter_hospital.png)
+
+
+### Proxy Pattern
+
+To fulfill the requirement of tracking calculator usage and computing statistical averages of patient data while preserving the anonymity of users, we applied the **Proxy Design Pattern**.
+This pattern allows us to extend the functionality of the original health calculator without modifying its implementation. 
+
+![Proxy pattern](design_patterns/proxy.png)
+
+
+### Adapter Pattern
+
+To support both European (meters and grams) and American (feet and pounds) input formats while reusing the existing calculator (which works with centimeters and kilograms), we applied the **Adapter Design Pattern**.
+
+The adapter classes convert input units to the expected format and delegate calculations to the original calculator. This ensures compatibility without modifying the core logic. Additionally, the adapters handle localized BMR messages in both English and Spanish.
+
+![Adapter pattern](design_patterns/adapter_versiones.png)
+
+
