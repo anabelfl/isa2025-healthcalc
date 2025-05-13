@@ -1,58 +1,29 @@
 package cliente;
 
-import adaptador.AmericanHealthAdapter;
-import adaptador.EuropeanHealthAdapter;
+import adapter.HealthAdapter;
 import healthcalc.HealthCalc;
 import healthcalc.HealthCalcImp;
-import hospital.HospitalProxy;
+import proxy.HospitalProxy;
 
 public class MainStats {
 
     public static void main(String[] args) {
 
         HealthCalc calc = HealthCalcImp.getInstance();
+        
+        // Adaptador
+        HealthAdapter calcEuropea = new HealthAdapter(calc);
+        System.out.println(calcEuropea.idealWeight(1.64f, 'w'));	
+        System.out.println(calcEuropea.basalMetabolicRate(63000, 1.64f, 21, 'w'));
 
-        // Adaptadores
-        EuropeanHealthAdapter calcEuropean = new EuropeanHealthAdapter(calc);
-        AmericanHealthAdapter calcAmerican = new AmericanHealthAdapter(calc);
-
-        // Proxies distintos
-        HospitalProxy europeanProxy = new HospitalProxy(calcEuropean);
-        HospitalProxy americanProxy = new HospitalProxy(calcAmerican);
-
-        try {
-            // Se añaden pacientes en sistema europeo (gramos, metros)
-            System.out.println("------ Pacientes sistema europeo ------");
-            europeanProxy.idealWeight(1.64f, 'm'); // altura en metros
-            europeanProxy.basalMetabolicRate(63500f, 1.64f, 21, 'w'); // peso en gramos, altura en metros
-            System.out.println();
-            europeanProxy.basalMetabolicRate(80400f, 1.80f, 30, 'm'); // peso en gramos, altura en metros
-
-            System.out.println();
-
-            // Se añaden pacientes en sistema americano (libras, pies)
-            System.out.println("------ Pacientes sistema americano ------");
-            americanProxy.idealWeight(5.7f, 'm'); // pies
-            americanProxy.basalMetabolicRate(140f, 5.7f, 21, 'w'); // libras, pies
-            System.out.println();
-            americanProxy.basalMetabolicRate(177f, 5.9f, 30, 'm'); // libras, pies
-
-            System.out.println();
-            
-            System.out.println("------ Estadísticas Europeas ------");
-            printStats(europeanProxy);
-
-            System.out.println();
-
-            System.out.println("------ Estadísticas Americanas ------");
-            printStats(americanProxy);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HospitalProxy proxy = new HospitalProxy(calcEuropea);
+        System.out.println(proxy.idealWeight(1.64f, 'w'));
+        System.out.println(proxy.basalMetabolicRate(63000, 1.64f, 21, 'w'));
+        printStats(proxy);
     }
 
     public static void printStats(HospitalProxy proxy) {
+        System.out.println("------ Estadísticas ------");
         System.out.println("Altura media: " + proxy.alturaMedia());
         System.out.println("Peso medio: " + proxy.pesoMedio());
         System.out.println("Edad media: " + proxy.edadMedia());
