@@ -321,12 +321,12 @@ This pattern allows us to extend the functionality of the original health calcul
 ![Proxy pattern](design_patterns/proxy.png)
 
 
-### Adapter Pattern
+### Decorator Pattern
 
-To support both European (meters and grams) and American (feet and pounds) input formats while reusing the existing calculator (which works with centimeters and kilograms), we applied the **Adapter Design Pattern**.
+To add additional features, such as displaying personalized messages in English and Spanish during BMR calculations, without modifying the existing calculation logic, we applied the **Decorator Design Pattern**.
 
-The adapter classes convert input units to the expected format and delegate calculations to the original calculator. This ensures compatibility without modifying the core logic. Additionally, the adapters handle localized BMR messages in both English and Spanish.
+Decorator classes wrap objects that implement the common interface and delegate core operations while injecting extra behavior before or after the call. This allows us to dynamically extend functionality, such as unit conversions or localized messages, without changing the core health calculation system.
 
-![Adapter pattern](design_patterns/adapter_versiones.png)
+![Decorator pattern](design_patterns/decorator.png)
 
 
