@@ -25,54 +25,64 @@ public class HealthCalcTest {
 	@DisplayName("Test the correct calculation of ideal weight for women")
 	void correctResultWomenIW() throws Exception {
 		// Arrange
-		int h = 164;
-		char g = 'w';
+		Person woman = new PersonImp(60, 164, 30, Gender.FEMALE);
+		CardiovascularMetrics metrics = new CardiovascularMetrics();
+
 		// Act
-		float iw_women = calc.idealWeight(h, g);
-		float result = h - 100 - (h - 150) / 2.5f;
+    	float result = metrics.getIdealBodyWeight(woman);
+		float expected = 164 - 100 - (164 - 150) / 2.5f;
+
 		// Assert
-		assertEquals(result, iw_women);
+		assertEquals(expected, result, 0.1f);
 	}
 
 	@Test
 	@DisplayName("Test the correct calculation of ideal weight for men")
 	void correctResultMenIW() throws Exception {
-		int h = 164;
-		char g = 'm';
+   		// Arrange
+   		Person man = new PersonImp(80, 191, 30, Gender.MALE);
+    	CardiovascularMetrics metrics = new CardiovascularMetrics();
 
-		double iw_men = calc.idealWeight(h, g);
-		float result = h - 100 - (h - 150) / 4.0f;
+    	// Act
+    	float result = metrics.getIdealBodyWeight(man);
+    	float expected = 191 - 100 - (191 - 150) / 4.0f;
 
-		assertEquals(result, iw_men);
+    	// Assert
+    	assertEquals(expected, result, 0.1f);
 	}
 
 	@Test
 	@DisplayName("Upper limit height is 250cm, otherwise throws exception.")
-	void upperLimitHeightIW() {
-		int h = 300;
+		void upperLimitHeightIW() {
+    	// Arrange
+    	CardiovascularMetrics metrics = new CardiovascularMetrics();
 
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.idealWeight(h, 'm'));
-	}
+    	// Act + Assert
+    	IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        	Person veryTallMan = new PersonImp(80, 251, 30, Gender.MALE);
+        metrics.getIdealBodyWeight(veryTallMan);
+    	});
+	}	
 
 	@Test
 	@DisplayName("Lower limit height is 0cm, otherwise throws exception.")
-	void lowerLimitHeightIW() {
-		int h = 0;
+		void lowerLimitHeightIW() {
+		// Arrange
+		CardiovascularMetrics metrics = new CardiovascularMetrics();
 
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.idealWeight(h, 'm'));
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person veryShortMan = new PersonImp(80, 0, 30, Gender.MALE);
+			metrics.getIdealBodyWeight(veryShortMan);
+		});
 	}
 
-	@Test
-	@DisplayName("Throws exception when gender char is invalid.")
-	void invalidGenderThrowsExceptionIW() {
-		int h = 169;
-		char gender = 'X';
-
-		assertThrows(IllegalArgumentException.class, () ->
-			calc.idealWeight(h, gender));
-	}
+	/* Antes: throws exception when gender char is invalid
+	 * Ahora: No se puede usar PersonImp para probar un género 
+	 * uinválido porque no acepta un valor inválido.
+	 * Tampoco existe un método que reciba un char
+	 * directamente en CardiovascularMetrics.
+	 */
 
 /*
  * Tests del método basalMetabolicRate de la clase HealthCalcImp
@@ -81,114 +91,116 @@ public class HealthCalcTest {
 	@Test
 	@DisplayName("Test the correct calculation of basal metabolic rate for women.")
 	void correctResultWomenBMR() throws Exception {
-		float w = 65;
-		int h = 164;
-		int age = 21;
-		char g = 'w';
+		// Arrange
+		Person woman = new PersonImp(65, 164, 21, Gender.FEMALE);
+		MetabolicMetrics metrics = new MetabolicMetrics();
 
-		float bmr_women = calc.basalMetabolicRate(w, h, age, g);
-		float result = 447.593f + (9.247f * w) + (3.098f * h) - (4.330f * age);
+		// Act
+		float bmr_women = metrics.basalMetabolicRate(woman);
+		float result = 447.593f + (9.247f * 65) + (3.098f * 164) - (4.330f * 21);
 
-		// assertEquals(1465.79, bmr_women, 0.01f); margen de error del 0.01
-		assertEquals(result, bmr_women);
+		// Assert. Margen de error del 0.1
+		assertEquals(result, bmr_women, 0.1f);
 	}
 
 	@Test
 	@DisplayName("Test the correct calculation of basal metabolic rate for men.")
 	void correctResultMenBMR() throws Exception {
-		float w = 70;
-		int h = 177;
-		int age = 23;
-		char g = 'm';
+		// Arrange
+		Person man = new PersonImp(80, 177, 45, Gender.MALE);
+		MetabolicMetrics metrics = new MetabolicMetrics();
 
-		float bmr_men = calc.basalMetabolicRate(w, h, age, g);
-		float result = 88.362f + (13.397f * w) + (4.799f * h) - (5.677f * age);
+		// Act
+		float bmr_man = metrics.basalMetabolicRate(man);
+		float result = 88.362f + (13.397f * 80) + (4.799f * 177) - (5.677f * 45);
 
-		assertEquals(result, bmr_men);
+		// Assert
+		assertEquals(result, bmr_man, 0.1f);
 	}
 
 	@Test
 	@DisplayName("The upper limit weight is 400kg; otherwise throw exception.")
 	void upperLimitWeightBMR() {
-		float w = 460;
-		int h = 200;
-		int age = 45;
-		char g = 'm';
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
 
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person man = new PersonImp(500, 190, 30, Gender.MALE);
+			metrics.basalMetabolicRate(man);
+		});
 	}
 
 	@Test
-	@DisplayName("The lower limit weight is 0kg; otherwise, throw exception.")
+	@DisplayName("Lower limit height is 0cm, otherwise throws exception.")
 	void lowerLimitWeightBMR() {
-		int w = 0;
-		int h = 120;
-		int age = 10;
-		char g = 'w';
-		
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
+
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person man = new PersonImp(80, 0, 30, Gender.MALE);
+			metrics.basalMetabolicRate(man);
+		});
 	}
 
 	@Test
 	@DisplayName("The upper limit height is 250 cm; otherwise throw exception.")
 	void upperLimitHeightBMR() {
-		float w = 60;
-		int h = 260;
-		int age = 65;
-		char g = 'm';
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
 
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person man = new PersonImp(60, 260, 65, Gender.MALE);
+			metrics.basalMetabolicRate(man);
+		});
 	}
 
 	@Test
 	@DisplayName("The lower limit height is 0kg; otherwise, throw exception.")
 	void lowerLimitHeightBMR() {
-		int w = 60;
-		int h = -4;
-		int age = 10;
-		char g = 'w';
-		
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
+
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person fem = new PersonImp(60, -4, 65, Gender.FEMALE);
+			metrics.basalMetabolicRate(fem);
+		});
 	}
 
 	@Test
 	@DisplayName("Test if age is in range; if not, throw an exception.")
 	void invalidAgeThrowsException1BMR() {
-		int w = 60;
-		int h = 100;
-		int age = -3;
-		char g = 'm';
-		
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
+
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person fem = new PersonImp(60, 100, -3, Gender.FEMALE);
+			metrics.basalMetabolicRate(fem);
+		});
 	}
 
 	@Test
 	@DisplayName("Test if age is in range; if not, throw an exception.")
 	void invalidAgeThrowsException2BMR() {
-		int w = 60;
-		int h = 100;
-		int age = 130;
-		char g = 'm';
-		
-		assertThrows(IllegalArgumentException.class, () -> 
-		calc.basalMetabolicRate(w, h, age, g));
+		// Arrange
+    	MetabolicMetrics metrics = new MetabolicMetrics();
+
+		// Act + Assert
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+			Person fem = new PersonImp(60, 100, 140, Gender.FEMALE);
+			metrics.basalMetabolicRate(fem);
+		});
 	}
 
-	@Test
-	@DisplayName("Throws exception when gender char is invalid.")
-	void invalidGenderThrowsExceptionBMR() {
-		int w = 60;
-		int h = 150;
-		int age = 23;
-		char g = 'p';
-
-		assertThrows(IllegalArgumentException.class, () ->
-			calc.basalMetabolicRate(w, h, age, g));
-	}
+	/* Antes: throws exception when gender char is invalid
+	 * Ahora: No se puede usar PersonImp para probar un género 
+	 * uinválido porque no acepta un valor inválido.
+	 * Tampoco existe un método que reciba un char
+	 * directamente en Metabolicmetrics.
+	 */
 
 }
