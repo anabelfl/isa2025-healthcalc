@@ -1,0 +1,128 @@
+===============
+
+Refactoring Log
+
+===============
+
+Consideraciones:
+
+   El reducido número de líneas de código creadas manualmente se debe
+   al apoyo de la extensión de Copilot, que ofrece predicciones altamente
+   precisas, facilitando la escritura y optimización del código
+
+   Antes existía el test: throws exception when gender char is invalid
+   Ahora no se puede usar PersonImp para probar un género inválido porque
+   al ser un enumerado no acepta un valor inválido.
+   Tampoco existe un método que reciba un char directamente en MetabolicMetrics.
+
+=================================================================================
+
+- Crear Enumerado Gender
+   (1) Bad Smell: Primitive Obsession
+   (2) Refactorización aplicada: Replace Type Code with Enum
+   (3) Tipo de refactorización: Attribute Refactoring
+   (4) El uso de un tipo primitivo (char) para representar el género ('M', 'W')
+   genera Primitive Obsession, lo que podía llevar a errores y valores inconsistentes
+   Para solucionarlo, se reemplaza el primitivo por el enumerado Gender
+   (5) 1 Enum nuevo Gender y 1 líneas de código manuales
+
+
+- Crear Interfaz Person
+   (1) Bad Smell: Data Clumps.
+   (2) Refactorización aplicada: Introduce Parameter Object.
+   (3) Tipo de refactorización: Attribute Refactoring.
+   (4) Los atributos height, weight, age y gender aparecían repetidos en varias
+   partes del código, generando Data Clumps. Para solucionarlo, agrupan
+   en la interfaz Person, mejorando la estructura y reutilización del código.
+   (5) 1 interfaz nueva Person, se implementa en HealthCalcImp y 1 líneas de código manuales.
+
+
+- Crear clase CardiovascularMetrics y mover lógica de idealWeight
+   (1) Bad Smell: Long Method.
+   (2) Refactorización aplicada: Extract Class.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) Los métodos idealWeight y basalMetabolicRate de la clase HealthCalcImp 
+   le hacían responsable de múltiples cálculos creando sobrecarga en la clase.
+   Entonces se crea la nueva clase CardiovascularMetrics para distrubuir responsabilidades.
+
+   (1) Bad Smell: Feature Envy
+   (2) Refactorización aplicada: Move Method.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) La lógica de idealWeight usaba en exceso los parámetros de entrada generando
+   Feature Envy. Por tanto, se mueve el método de HealthCalcImp al nuevo CardiovascularMetrics.
+   
+   (5) 1 nueva clase CardiovascularMetrics, modificaciones en 1 clase existente (HealthCalcImp), 4 líneas manuales.
+
+
+- Crear clase MetabolicMetrics y mover lógica de basalMetabolicRate
+   (1) Bad Smell: Long Method.
+   (2) Refactorización aplicada: Extract Class.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) HealthCalcImp carga con múltiples cálculos complejos generando Long Method.
+   Se soluciona al crear la clase MetabolicMetrics para distrubuir responsabilidades.
+
+   (1) Bad Smell: Feature Envy
+   (2) Refactorización aplicada: Move Method (mover lógica BMR de HealthCalcImp a MetabolicMetrics)
+   (3) Tipo de refactorización: Class Refactoring
+   (4) Similar al caso de idealWeight. La lógica de BMR se centraba mucho en los datos de Person
+   generando Feature Envy. Entonces, se mueve lógica BMR de HealthCalcImp a MetabolicMetrics.
+
+   (5) 1 nueva clase MetabolicMetrics, modificaciones en 1 clase existente (HealthCalcImp), 4 líneas manuales.
+
+
+- Refactorizar la clase HealthCalcImp y la interfaz HealthCalc
+   (1) Bad Smell: Large Class.
+   (2) Refactorización aplicada: Implemented Person interface in HealthCalcImp.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) La clase HealthCalcImp acumulaba múltiples cálculos complejos, lo que la
+   hacía difícil de mantener y extender, generando el problema de Large Class.
+   Para mejorar la organización y separación de responsabilidades, se implementa 
+   la interfaz Person, facilitando la gestión de datos y reduciendo la carga de HealthCalcImp.
+
+   (1) Bad Smell: Primitive Obsession.
+   (2) Refactorización aplicada: Added deprecated tags to old methods in HealthCalc interface.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) En la interfaz HealthCalc, varios métodos aún utilizaban tipos primitivos
+   (int para altura, char para género), lo que causaba Primitive Obsession.
+   Para solucionarlo, se agregaron etiquetas @Deprecated a los métodos antiguos,
+   sugiriendo el uso de Person como nuevo enfoque.
+
+   (5) 1 nueva clase CardiovascularMetrics, implementación de Person en HealthCalcImp,
+   4 métodos marcados como @Deprecated, 3 líneas modificadas
+
+
+- Crear clase PersonImp
+   (1) Bad Smell: God Class
+   (2) Refactorización aplicada: Extract Class
+   (3) Tipo de refactorización: Class Refactoring
+   (4) HealthCalcImp manejaba tanto los cálculos como los datos de Person,
+   lo que lo convertía en una God Class con múltiples responsabilidades.
+   Para separar responsabilidades, se extraen los atributos relacionados con
+   Person a una nueva clase PersonImp, dejando HealthCalcImp exclusivamente
+   como una clase de cálculo.
+   (5) 1 nueva clase PersonImp, extracción de datos de HealthCalcImp,
+   ajustes en 2 métodos, modificación de 8 líneas de código.
+
+- Actualizar controlador HealthCtrl
+   (1) Bad Smell: Data Clumps.
+   (2) Refactorización aplicada: Introduce Parameter Object.  
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) El controlador HealthCtrl recibía múltiples parámetros individuales desde la vista,
+   lo que generaba Data Clumps. Para mejorar la estructura, se reemplazan los parámetros
+   sueltos con el objeto PersonImpl, encapsulando los datos relacionados.
+
+   (1) Bad Smell: Long Parameter List.
+   (2) Refactorización aplicada: Delegación a clases especializadas.
+   (3) Tipo de refactorización: Class Refactoring.
+   (4) La interfaz HealthCalc tenía métodos con listas extensas de parámetros,
+   contribuyendo al problema de Long Parameter List. HealthCtrl ahora delega
+   las clases especializadas CardiovascularMetrics y MetabolicMetrics,
+   separando las responsabilidades de cálculo.
+   
+   (5) 9 líneas añadidas manualmente en HealthCtrl, 1 clase
+
+=================================================================================
+
+Anabel Yu Flores Moral
+Ingeniería del Software Avanzada
+22/05/2025
