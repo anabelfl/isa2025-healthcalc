@@ -3,7 +3,12 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import healthcalc.CardiovascularMetrics;
+import healthcalc.Gender;
 import healthcalc.HealthCalc;
+import healthcalc.MetabolicMetrics;
+import healthcalc.Person;
+import healthcalc.PersonImp;
 import vista.Vista;
 
 public class HealthCtrl implements ActionListener {
@@ -28,19 +33,29 @@ public class HealthCtrl implements ActionListener {
             if (selectedTabIndex == 0) { // TAB IDEAL WEIGTH
                 try {
                     int altura = vista.getAltura();
-                    char genero = vista.getGeneroSeleccionado(); 
+                    char generoChar = vista.getGeneroSeleccionado();
 
-                    float resultado = modelo.idealWeight(altura, genero); 
+                    Gender genderEnum;
+                    switch (generoChar) {
+                        case 'w', 'W' -> genderEnum = Gender.FEMALE;
+                        case 'm', 'M' -> genderEnum = Gender.MALE;
+                        default -> throw new IllegalArgumentException("Invalid gender character: " + generoChar);
+                    }
+
+                    Person person = new PersonImp(0, altura, 0, genderEnum); 
+                    
+                    CardiovascularMetrics cvMetrics = new CardiovascularMetrics();
+                    float resultado = cvMetrics.getIdealBodyWeight(person);
+
                     vista.setResultado(resultado); 
                     vista.resetFieldsIW(); 
 
                 } catch (IllegalArgumentException ex) {
                     vista.error("Error: " + ex.getMessage()); 
                 } catch (Exception ex) {
-                    vista.error("Error: " + ex.getMessage());
+                    vista.error("An unexpected error occurred: " + ex.getMessage());
                 }
             } 
-            
         	/*
         	 * BASAL METABOLIC RATE
         	 */
@@ -49,16 +64,27 @@ public class HealthCtrl implements ActionListener {
                     float pesoBMR = vista.getPesoBMR();
                     int alturaBMR = vista.getAlturaBMR();
                     int edadBMR = vista.getEdadBMR();
-                    char generoBMR = vista.getGeneroSeleccionadoBMR();
+                    char generoBMRChar = vista.getGeneroSeleccionadoBMR();
 
-                    float resultado = modelo.basalMetabolicRate(pesoBMR, alturaBMR, edadBMR, generoBMR);
+                    Gender genderEnumBMR;
+                    switch (generoBMRChar) {
+                        case 'w', 'W' -> genderEnumBMR = Gender.FEMALE;
+                        case 'm', 'M' -> genderEnumBMR = Gender.MALE;
+                        default -> throw new IllegalArgumentException("Invalid gender character: " + generoBMRChar);
+                    }
+
+                    Person personBMR = new PersonImp(pesoBMR, alturaBMR, edadBMR, genderEnumBMR);
+                    
+                    MetabolicMetrics mMetrics = new MetabolicMetrics();
+                    float resultado = mMetrics.basalMetabolicRate(personBMR);
+
                     vista.setResultadoBMR(resultado);
                     vista.resetFieldsBMR();
 
                 } catch (IllegalArgumentException ex) {
                     vista.errorBMR("Error: " + ex.getMessage());
                 } catch (Exception ex) {
-                    vista.errorBMR("Error: " + ex.getMessage());
+                    vista.errorBMR("An unexpected error occurred: " + ex.getMessage());
                 }
             }
         }
