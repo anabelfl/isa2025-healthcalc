@@ -475,8 +475,12 @@ Tampoco existe un método que reciba un `char` directamente en `MetabolicMetrics
   - 9 líneas añadidas manualmente en `HealthCtrl`  
   - 1 clase actualizada
 
-### 8. Actualizar Vista (No necesita cambios)
-   La interfaz de `Vista` ya proporcionaba datos sin procesar, por lo que `HealthCtrl` se ha adaptado para crear el objeto `Person` a partir de estos datos crudos proporcionados en `Vista`.
+### 8. Actualizar Vista
+  (1) Bad Smell: Tight coupling (`Vista` y HealthCtrl)
+  (2) Refactorización aplicada: Separación de responsabilidades mediante la actualización de la gestión de eventos en `Vista`
+  (3) Tipo de refactorización: Class refactoring
+  (4) Se modificó `Vista` para que no dependiera directamente de la lógica del controlador, registrando controladores específicos para cada acción. Esto mejora la separación de responsabilidades y facilita futuras modificaciones.
+  (5) 3 clases (`Vista`, `HealthCtrl` y `MainHealth`). 5 líneas de código.
    
 ### 9. Actualizar Tests
    Las pruebas estaban realizadas acorde con la antigua implementación de `HealthCalcImp`. Por tanto, fallaban debido a la refactorización de la estructura del código.
