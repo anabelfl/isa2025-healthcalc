@@ -121,6 +121,13 @@ Consideraciones:
    
    (5) 9 líneas añadidas manualmente en HealthCtrl, 1 clase
 
+- Actualizar Vista (No necesita cambios)
+   La interfaz de Vista ya proporcionaba datos sin procesar, por lo que HealthCtrl se ha adaptado para crear el objeto Person a partir de estos datos crudos proporcionados en Vista.
+
+- Actualizar Tests
+   Las pruebas estaban realizadas acorde con la antigua implementación de HealthCalcImp. Por tanto, fallaban debido a la refactorización de la estructura del código.
+   Entonces se han adaptado las pruebas a la nueva estructura modificando los casos de prueba para usar PersonImp, CardiovascularMetrics y MetabolicMetrics. Enfocando los cálculos y validaciones a las nuevas clases responsables.
+
 =================================================================================
 
 Anabel Yu Flores Moral
