@@ -330,3 +330,162 @@ Decorator classes wrap objects that implement the common interface and delegate 
 ![Decorator pattern](design_patterns/decorator.png)
 
 
+
+---
+
+## Práctica 7: Refactorings
+
+# Refactoring Log
+
+#### Consideraciones
+
+- El reducido número de líneas de código creadas manualmente se debe al apoyo de la extensión de Copilot, que ofrece predicciones altamente precisas, facilitando la escritura y optimización del código.
+
+- Antes existía el test: `throws exception when gender char is invalid`.  
+Ahora no se puede usar `PersonImp` para probar un género inválido porque al ser un enumerado no acepta un valor inválido.  
+Tampoco existe un método que reciba un `char` directamente en `MetabolicMetrics`.
+
+---
+
+### 1. Crear Enumerado `Gender`
+
+- **Bad Smell:** Primitive Obsession  
+- **Refactorización aplicada:** Replace Type Code with Enum  
+- **Tipo de refactorización:** Attribute Refactoring  
+- **Descripción:**  
+  El uso de un tipo primitivo (`char`) para representar el género (`'M'`, `'W'`) generaba Primitive Obsession, lo que podía llevar a errores y valores inconsistentes.  
+  Se reemplaza el primitivo por el enumerado `Gender`.
+
+- **Impacto:**  
+  - 1 Enum nuevo: `Gender`  
+  - 1 línea de código manual
+
+---
+
+### 2. Crear Interfaz `Person`
+
+- **Bad Smell:** Data Clumps  
+- **Refactorización aplicada:** Introduce Parameter Object  
+- **Tipo de refactorización:** Attribute Refactoring  
+- **Descripción:**  
+  Los atributos `height`, `weight`, `age` y `gender` aparecían repetidos en varias partes del código, generando Data Clumps. Para solucionarlo, se agrupan en la interfaz `Person`, mejorando estructura y reutilización.
+
+- **Impacto:**  
+  - 1 interfaz nueva: `Person`  
+  - Implementada en `HealthCalcImp`  
+  - 1 línea de código manual
+
+---
+
+### 3. Crear clase `CardiovascularMetrics` y mover lógica de `idealWeight`
+
+- **Bad Smell:** Long Method  
+- **Refactorización aplicada:** Extract Class  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  Los métodos `idealWeight` y `basalMetabolicRate` sobrecargaban `HealthCalcImp` al tener la responsabilidad de muchos cálculos complejos. Entonces se crea la nueva clase `CardiovascularMetrics` para distribuir responsabilidades.
+
+- **Bad Smell:** Feature Envy  
+- **Refactorización aplicada:** Move Method  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  `idealWeight` dependía en exceso de los datos de entrada. Por tanto, se mueve el método de `HealthCalcImp` al nuevo `CardiovascularMetrics`.
+
+- **Impacto:**  
+  - 1 nueva clase: `CardiovascularMetrics`  
+  - Modificaciones en clase original `HealthCalcImp`  
+  - 4 líneas manuales
+
+---
+
+### 4. Crear clase `MetabolicMetrics` y mover lógica de `basalMetabolicRate`
+
+- **Bad Smell:** Long Method  
+- **Refactorización aplicada:** Extract Class  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  `HealthCalcImp` realizaba múltiples cálculos complejos. Entonces, se crea `MetabolicMetrics` para distribuir responsabilidades.
+
+- **Bad Smell:** Feature Envy  
+- **Refactorización aplicada:** Move Method  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  La lógica de `BMR` se centraba en datos de `Person`. Entonces, se mueve lógica BMR de `HealthCalcImp` a `MetabolicMetrics`.
+
+- **Impacto:**  
+  - 1 nueva clase: `MetabolicMetrics`  
+  - Modificaciones en `HealthCalcImp`  
+  - 4 líneas manuales
+
+---
+
+### 5. Refactorizar `HealthCalcImp` y la interfaz `HealthCalc`
+
+- **Bad Smell:** Large Class  
+- **Refactorización aplicada:** Implemented `Person` interface in `HealthCalcImp`  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  `HealthCalcImp` acumulaba muchos cálculos complejos, por lo que resultaba difícil de mantener y extender. Al implementar `Person` se mejora la organización.
+
+- **Bad Smell:** Primitive Obsession  
+- **Refactorización aplicada:** Added `@Deprecated` tags to old methods in `HealthCalc`  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  Métodos antiguos en la interfaz `HealthCalc` usaban tipos primitivos (int para altura, char para género). Para solucionarlo, se marcan con la etiqueta `@Deprecated`, sugiriendo el uso de `Person` como nuevo enfoque.
+
+- **Impacto:**  
+  - 1 nueva clase: `CardiovascularMetrics`  
+  - Implementación de `Person` en `HealthCalcImp`  
+  - 4 métodos marcados como `@Deprecated`  
+  - 3 líneas modificadas
+
+---
+
+### 6. Crear clase `PersonImp`
+
+- **Bad Smell:** God Class  
+- **Refactorización aplicada:** Extract Class  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  `HealthCalcImp` manejaba tanto los cálculos y datos de `Person`, lo que le convertía en una God Class con múltiples responsabilidades.  
+  Para solucionarlo, se extraen los atributos a `PersonImp`, dejando HealthCalcImp exclusivamente como una clase de cálculo.
+
+- **Impacto:**  
+  - 1 nueva clase: `PersonImp`
+  - Ajustes en 2 métodos  
+  - 8 líneas de código modificadas
+
+---
+
+### 7. Actualizar controlador `HealthCtrl`
+
+- **Bad Smell:** Data Clumps  
+- **Refactorización aplicada:** Introduce Parameter Object  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  El controlador `HealthCtrl` recibía muchos parámetros sueltos, individuales desde la vista, lo que generaba Data Clumps. Para mejorar la estructura, se reemplazan los parámetros sueltos con el objeto `PersonImp`, encapsulando los datos relacionados.
+
+- **Bad Smell:** Long Parameter List  
+- **Refactorización aplicada:** Delegación a clases especializadas  
+- **Tipo de refactorización:** Class Refactoring  
+- **Descripción:**  
+  La interfaz `HealthCalc` tenía métodos con parámetros muy extensos. Para solucionarlo, ahora `HealthCtrl` delega a clases especializadas `CardiovascularMetrics` y `MetabolicMetrics`, seperando las responsabilidades de cálculo.
+
+- **Impacto:**  
+  - 9 líneas añadidas manualmente en `HealthCtrl`  
+  - 1 clase actualizada
+
+### 8. Actualizar Vista (No necesita cambios)
+   La interfaz de `Vista` ya proporcionaba datos sin procesar, por lo que `HealthCtrl` se ha adaptado para crear el objeto `Person` a partir de estos datos crudos proporcionados en `Vista`.
+   
+### 9. Actualizar Tests
+   Las pruebas estaban realizadas acorde con la antigua implementación de `HealthCalcImp`. Por tanto, fallaban debido a la refactorización de la estructura del código.
+   Entonces se han adaptado las pruebas a la nueva estructura modificando los casos de prueba para usar `PersonImp`, `CardiovascularMetrics` y `MetabolicMetrics`. Enfocando los cálculos y validaciones a las nuevas clases responsables.
+
+
+---
+
+**Anabel Yu Flores Moral**  
+*Ingeniería del Software Avanzada*  
+22/05/2025
+
