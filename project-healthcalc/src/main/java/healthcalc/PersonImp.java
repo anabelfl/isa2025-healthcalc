@@ -21,9 +21,9 @@ public class PersonImp implements Person {
             throw new IllegalArgumentException("Gender cannot be null.");
         }
 
-        this.weight = weight;
+        this.weight = -1; 
         this.height = height;
-        this.age = age;
+        this.age = -1; 
         this.gender = gender;
     }
 
