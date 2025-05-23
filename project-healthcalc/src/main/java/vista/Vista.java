@@ -1,23 +1,21 @@
 package vista;
 
-import java.awt.EventQueue;
+import healthcalc.HealthCalc;
+import healthcalc.HealthCalcImp;
+
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import controlador.HealthCtrl;
-import java.awt.BorderLayout;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import java.awt.Font;
 import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
-import java.awt.Dimension;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -53,8 +51,16 @@ public class Vista extends JFrame {
 				try {
 					Vista frame = new Vista();
 					frame.setTitle("HealthCalc");
+
+					HealthCalc modelo = HealthCalcImp.getInstance(); 
+					HealthCtrl controlador = new HealthCtrl(modelo, frame);
+
+					frame.registrarControlador(controlador);
+					frame.registrarControladorBMR(controlador);
+
 					frame.pack();
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
