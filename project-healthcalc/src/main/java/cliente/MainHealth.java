@@ -21,6 +21,7 @@ public class MainHealth {
 					vista.registrarControladorBMR(controlador);
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.out.println("Error en MainHealth: " + e.getMessage());
 				}
 			}
 		});

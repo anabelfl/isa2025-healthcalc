@@ -1,28 +1,35 @@
 package cliente;
 
-import adapter.HealthAdapter;
-import adapter.HealthHospital;
+import healthcalc.CardiovascularMetrics;
+import healthcalc.Gender;
 import healthcalc.HealthCalc;
 import healthcalc.HealthCalcImp;
+import healthcalc.MetabolicMetrics;
+import healthcalc.Person;
+import healthcalc.PersonImp;
 
 public class MainHospital {
 
     public static void main(String[] args) throws Exception {
 
 		HealthCalc calcOriginal = HealthCalcImp.getInstance(); // usando singleton
-		
-        // Realizar las pruebas de la calculadora original
-        float iw = calcOriginal.idealWeight(164, 'w');
-        float bmr = calcOriginal.basalMetabolicRate(63, 164, 21, 'w');
-        System.out.println(iw);
-        System.out.println(bmr);
-        
-        HealthHospital calcAdaptado = new HealthAdapter(calcOriginal);
 
-        // Realizar las pruebas de la calculadora adaptada
-        float iw2 = calcAdaptado.idealWeight(1.64f, 'w');
-        float bmr2 = calcAdaptado.basalMetabolicRate(63000f, 1.64f, 21, 'w');
-        System.out.println("Peso ideal: " + iw2 + " g");
-        System.out.println("BMR: " + bmr2 + " kcal/dia");
+        Person person1 = new PersonImp(63, 164, 21, Gender.FEMALE);
+        Person person2 = new PersonImp(70, 180, 35, Gender.MALE); // Ejemplo adicional
+		
+        CardiovascularMetrics cvMetrics = new CardiovascularMetrics();
+        MetabolicMetrics mMetrics = new MetabolicMetrics();
+
+        float iw1 = cvMetrics.getIdealBodyWeight(person1);
+        float iw2 = cvMetrics.getIdealBodyWeight(person2);
+
+        float bmr1 = mMetrics.basalMetabolicRate(person1);
+        float bmr2 = mMetrics.basalMetabolicRate(person2);
+
+        System.out.println(iw1);
+        System.out.println(iw2);
+        System.out.println(bmr1);
+        System.out.println(bmr2);
+        
     }
 }
