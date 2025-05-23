@@ -39,10 +39,10 @@ public class HealthCtrl implements ActionListener {
                     switch (generoChar) {
                         case 'w', 'W' -> genderEnum = Gender.FEMALE;
                         case 'm', 'M' -> genderEnum = Gender.MALE;
-                        default -> throw new IllegalArgumentException("Invalid gender character: " + generoChar);
+                        default -> throw new IllegalArgumentException("Gender cannot be null.");
                     }
 
-                    Person person = new PersonImp(0, altura, 0, genderEnum); 
+                    Person person = new PersonImp(70, altura, 30, genderEnum); 
                     
                     CardiovascularMetrics cvMetrics = new CardiovascularMetrics();
                     float resultado = cvMetrics.getIdealBodyWeight(person);
@@ -70,7 +70,7 @@ public class HealthCtrl implements ActionListener {
                     switch (generoBMRChar) {
                         case 'w', 'W' -> genderEnumBMR = Gender.FEMALE;
                         case 'm', 'M' -> genderEnumBMR = Gender.MALE;
-                        default -> throw new IllegalArgumentException("Invalid gender character: " + generoBMRChar);
+                        default -> throw new IllegalArgumentException("Gender cannot be null.");
                     }
 
                     Person personBMR = new PersonImp(pesoBMR, alturaBMR, edadBMR, genderEnumBMR);
